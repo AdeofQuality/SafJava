@@ -3,7 +3,9 @@ package Views;
 import Business.*;
 import java.sql.SQLException;
 import java.sql.Date;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+
 
 // @author efapro01.23 Roberto Carvalho
 
@@ -20,18 +22,58 @@ public class MainForm extends javax.swing.JFrame
     Service service;
     
     // ::::::::::::::::::::
-    // Constructor / InitialSetUp
+    // Constructor / initComponents / InitialSetUp
     // ::::::::::::::::::::
     
     public MainForm() throws SQLException 
     { 
-        /* Initialize */ initComponents(); 
+        System.out.println("-------------------");
+        System.out.println("Inicial Setup Start");
+        // Initialize
+        initComponents(); 
         
-        // Initial SetUp
-        programController = new ProgramController();
-        /* Fill deceased table */ selectAllDeceased();
-        /* Fill family table   */ selectAllFamily();
-        /* Fill service table  */ selectAllService();
+        /* 
+        *  Initial Setup for: 
+        *  - Generic Swing Form Settings
+        *  - Add Registry.Deceased
+        *  - Add Registry.Family
+        *  - Add Registry.Service
+        *  - Search 
+        */
+        
+        ////////////////
+        //  Generic  //
+        ////////////////
+        /* Center Screen      */ setLocationRelativeTo(null);
+        /* Program Controller */ programController = new ProgramController();
+        
+        //////////////////
+        // Add Deceased //
+        //////////////////
+        /* Fill Table          */ selectAllDeceased();
+        
+        //////////////////
+        //  Add Family  //
+        //////////////////
+        /* Fill Table          */ selectAllFamily();
+        
+        //////////////////
+        // Add Service //
+        //////////////////
+        /* Fill Table          */ selectAllService();
+        /* DatePicker Set Time */ dtpServiceUpdate.setDate(new Date(System.currentTimeMillis()));
+        /* DatePicker Set Time */ dtpServiceAdd.setDate(new Date(System.currentTimeMillis()));
+        
+        //////////////////
+        //    Search    //
+        //////////////////
+        /* Fill Table          */ selectAllSearch();
+        /* DatePicker Set Time */ dtpServiceDateFilter.setDate(new Date(System.currentTimeMillis()));
+        /* Fill Table list     */ selectAllSearchFamily();  
+        /* Fill Table list     */ selectAllSearchDeceased();
+        
+        System.out.println("-------------------");
+        
     }
     
     // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -47,10 +89,45 @@ public class MainForm extends javax.swing.JFrame
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        jTabbedPane = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        btnServiceServiceShowAll = new javax.swing.JButton();
+        btnServiceServiceFilter = new javax.swing.JButton();
+        dtpServiceDateFilter = new com.toedter.calendar.JDateChooser();
+        chkServicePayedFilter = new javax.swing.JCheckBox();
+        chkServiceIdFilter = new javax.swing.JCheckBox();
+        chkServiceDateFilter = new javax.swing.JCheckBox();
+        rdServicePayNo = new javax.swing.JRadioButton();
+        rdServicePayYes = new javax.swing.JRadioButton();
+        txtServiceServiceFilterByID = new javax.swing.JTextField();
+        jSeparator1 = new javax.swing.JSeparator();
+        panelSearch = new javax.swing.JPanel();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        dgvSearch = new javax.swing.JTable();
+        jPanel13 = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        txtServiceDeceasedFilterByName = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        btnServiceDeceasedFilterByName = new javax.swing.JButton();
+        txtServiceDeceasedFilterById = new javax.swing.JTextField();
+        btnServiceDeceasedFilterById = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        dgvSearchDeceased = new javax.swing.JTable();
+        jPanel14 = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        txtServiceFamilyFilterByName = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        btnServiceFamilyFilterByName = new javax.swing.JButton();
+        txtServiceFamilyFilterById = new javax.swing.JTextField();
+        btnServiceFamilyFilterById = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        dgvSearchFamily = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
@@ -160,31 +237,221 @@ public class MainForm extends javax.swing.JFrame
         chkServiceUpdatePayed = new javax.swing.JCheckBox();
         jLabel72 = new javax.swing.JLabel();
         txtServiceUpdateId = new javax.swing.JTextField();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        menu = new javax.swing.JMenu();
+        menu_AboutSaf = new javax.swing.JMenuItem();
+        menu_Exit = new javax.swing.JMenuItem();
+
+        jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1080, 720));
         setSize(new java.awt.Dimension(0, 0));
 
-        jScrollPane4.setViewportView(jTable2);
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1076, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 787, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTabbedPane1.addTab("Search", jPanel1);
+        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        jLabel1.setText("For Services");
+        jPanel6.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 20));
+
+        btnServiceServiceShowAll.setText("Show All");
+        btnServiceServiceShowAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnServiceServiceShowAllActionPerformed(evt);
+            }
+        });
+        jPanel6.add(btnServiceServiceShowAll, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 190, 110));
+
+        btnServiceServiceFilter.setText("Filter");
+        btnServiceServiceFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnServiceServiceFilterActionPerformed(evt);
+            }
+        });
+        jPanel6.add(btnServiceServiceFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 190, -1));
+
+        dtpServiceDateFilter.setToolTipText("");
+        dtpServiceDateFilter.setDateFormatString("dd MM yyyy");
+        dtpServiceDateFilter.setMaxSelectableDate(new java.util.Date(253370768485000L));
+        jPanel6.add(dtpServiceDateFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, 130, -1));
+
+        chkServicePayedFilter.setText("Payed");
+        jPanel6.add(chkServicePayedFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
+
+        chkServiceIdFilter.setText("ID");
+        jPanel6.add(chkServiceIdFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
+
+        chkServiceDateFilter.setText("Date");
+        jPanel6.add(chkServiceDateFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
+
+        rdServicePayNo.setSelected(true);
+        rdServicePayNo.setText("No");
+        rdServicePayNo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdServicePayNoActionPerformed(evt);
+            }
+        });
+        jPanel6.add(rdServicePayNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 110, -1, -1));
+
+        rdServicePayYes.setText("Yes");
+        rdServicePayYes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdServicePayYesActionPerformed(evt);
+            }
+        });
+        jPanel6.add(rdServicePayYes, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, -1, -1));
+        jPanel6.add(txtServiceServiceFilterByID, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 50, 50, -1));
+        jPanel6.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 190, 10));
+
+        jPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 10, 210, 330));
+
+        panelSearch.setLayout(new java.awt.BorderLayout());
+
+        dgvSearch.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Id", "FamilyId", "DeceasedId", "Comment", "Date", "Price", "CheckPay"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        dgvSearch.setName(""); // NOI18N
+        jScrollPane10.setViewportView(dgvSearch);
+
+        panelSearch.add(jScrollPane10, java.awt.BorderLayout.CENTER);
+
+        jPanel1.add(panelSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 350, 1090, 420));
+
+        jPanel13.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        jPanel13.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel13.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        jLabel13.setText("For Deceased");
+        jPanel13.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 20));
+
+        jLabel14.setText("By ID");
+        jPanel13.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, -1, -1));
+
+        txtServiceDeceasedFilterByName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtServiceDeceasedFilterByNameKeyPressed(evt);
+            }
+        });
+        jPanel13.add(txtServiceDeceasedFilterByName, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 70, 100, -1));
+
+        jLabel15.setText("By Name");
+        jPanel13.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
+
+        btnServiceDeceasedFilterByName.setText("Filter");
+        btnServiceDeceasedFilterByName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnServiceDeceasedFilterByNameActionPerformed(evt);
+            }
+        });
+        jPanel13.add(btnServiceDeceasedFilterByName, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 70, 60, -1));
+        jPanel13.add(txtServiceDeceasedFilterById, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, 50, -1));
+
+        btnServiceDeceasedFilterById.setText("Filter");
+        btnServiceDeceasedFilterById.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnServiceDeceasedFilterByIdActionPerformed(evt);
+            }
+        });
+        jPanel13.add(btnServiceDeceasedFilterById, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 40, 60, -1));
+
+        dgvSearchDeceased.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Id", "Name"
+            }
+        ));
+        dgvSearchDeceased.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dgvSearchDeceasedMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(dgvSearchDeceased);
+
+        jPanel13.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 230, 220));
+
+        jPanel1.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 10, 250, 330));
+
+        jPanel14.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        jPanel14.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel16.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        jLabel16.setText("For Relatives");
+        jPanel14.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 20));
+
+        jLabel17.setText("By ID");
+        jPanel14.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, -1, -1));
+
+        txtServiceFamilyFilterByName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtServiceFamilyFilterByNameKeyPressed(evt);
+            }
+        });
+        jPanel14.add(txtServiceFamilyFilterByName, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 70, 100, -1));
+
+        jLabel18.setText("By Name");
+        jPanel14.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
+
+        btnServiceFamilyFilterByName.setText("Filter");
+        btnServiceFamilyFilterByName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnServiceFamilyFilterByNameActionPerformed(evt);
+            }
+        });
+        jPanel14.add(btnServiceFamilyFilterByName, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 70, 60, -1));
+        jPanel14.add(txtServiceFamilyFilterById, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, 50, -1));
+
+        btnServiceFamilyFilterById.setText("Filter");
+        btnServiceFamilyFilterById.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnServiceFamilyFilterByIdActionPerformed(evt);
+            }
+        });
+        jPanel14.add(btnServiceFamilyFilterById, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 40, 60, -1));
+
+        dgvSearchFamily.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Id", "Name"
+            }
+        ));
+        dgvSearchFamily.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dgvSearchFamilyMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(dgvSearchFamily);
+
+        jPanel14.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 230, 220));
+
+        jPanel1.add(jPanel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 250, 330));
+
+        jTabbedPane.addTab("Search", jPanel1);
 
         jPanel2.setPreferredSize(new java.awt.Dimension(500, 500));
 
@@ -216,6 +483,14 @@ public class MainForm extends javax.swing.JFrame
         });
         dgvDeceased.setName(""); // NOI18N
         jScrollPane6.setViewportView(dgvDeceased);
+        if (dgvDeceased.getColumnModel().getColumnCount() > 0) {
+            dgvDeceased.getColumnModel().getColumn(0).setHeaderValue("Id");
+            dgvDeceased.getColumnModel().getColumn(1).setHeaderValue("Name");
+            dgvDeceased.getColumnModel().getColumn(2).setHeaderValue("Age");
+            dgvDeceased.getColumnModel().getColumn(3).setHeaderValue("Sex");
+            dgvDeceased.getColumnModel().getColumn(4).setHeaderValue("Comment");
+            dgvDeceased.getColumnModel().getColumn(5).setHeaderValue("Photo");
+        }
 
         jPanel8.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 60, 620, 620));
         jPanel8.add(txtDeceasedAddName, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 50, 204, -1));
@@ -365,7 +640,7 @@ public class MainForm extends javax.swing.JFrame
         dgvFamily.setName(""); // NOI18N
         jScrollPane7.setViewportView(dgvFamily);
 
-        jPanel9.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, 630, 590));
+        jPanel9.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, 620, 590));
         jPanel9.add(txtFamilyAddName, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, 244, -1));
 
         jLabel53.setText("Name");
@@ -598,18 +873,40 @@ public class MainForm extends javax.swing.JFrame
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1076, Short.MAX_VALUE)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1078, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 787, Short.MAX_VALUE)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Add Registry", jPanel2);
+        jTabbedPane.addTab("Add Registry", jPanel2);
+
+        menu.setText("Menu");
+
+        menu_AboutSaf.setText("About Saf");
+        menu_AboutSaf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_AboutSafActionPerformed(evt);
+            }
+        });
+        menu.add(menu_AboutSaf);
+
+        menu_Exit.setText("Exit");
+        menu_Exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_ExitActionPerformed(evt);
+            }
+        });
+        menu.add(menu_Exit);
+
+        jMenuBar1.add(menu);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -617,14 +914,14 @@ public class MainForm extends javax.swing.JFrame
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(jTabbedPane)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(jTabbedPane)
                 .addContainerGap())
         );
 
@@ -636,11 +933,34 @@ public class MainForm extends javax.swing.JFrame
     // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     
     ////////////////
-    //  Deceased  //
+    //  Menu      //
     ////////////////
     
-    // C R U D
+    private void menu_ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_ExitActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_menu_ExitActionPerformed
+
+    private void menu_AboutSafActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_AboutSafActionPerformed
+        
+        // Inform User
+        JOptionPane.showMessageDialog(null,
+                "SAF (Serviço Assistente Funerária)"
+              + "\nVersion 1.5" 
+              + "\nJava Edition"
+              + "\n\nCreated by Roberto Carvalho"                                     
+              + "\nContact Information: robertocarvalho.dev@gmail.com"
+              , "About Saf", JOptionPane.INFORMATION_MESSAGE);
+        
+    }//GEN-LAST:event_menu_AboutSafActionPerformed
+
+    // --------------------------
+
+    ////////////////////
+    //  Add Deceased  //
+    ////////////////////
    
+    // C R U D
+    
     // Select
     private void selectAllDeceased() 
     {
@@ -692,6 +1012,8 @@ public class MainForm extends javax.swing.JFrame
                 /* Photo   */ // Not implemented
                 
                 /* Refresh table */ selectAllDeceased();
+                /* Refresh table */ selectAllSearch();
+                /* Refresh table */ selectAllSearchDeceased();
             }
             // If user Cancels
             else { /* Do nothing */ }              
@@ -783,9 +1105,7 @@ public class MainForm extends javax.swing.JFrame
             else { }  
         }
     }//GEN-LAST:event_btnDeceaseRemoveActionPerformed
-    
-    // Radial Buttons
-    
+
     // RADIAL BUTTON (Add) Sex M
     private void rdDeceasedAddSexMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdDeceasedAddSexMActionPerformed
         rdDeceasedAddSexF.setSelected(false);
@@ -810,11 +1130,23 @@ public class MainForm extends javax.swing.JFrame
         rdDeceasedUpdateSexF.setSelected(true);
     }//GEN-LAST:event_rdDeceasedUpdateSexFActionPerformed
     
-    ////////////////
-    //  Service   //
-    ////////////////
+    // --------------------------
+    
+    ////////////////////
+    //  Add Service   //
+    ////////////////////
     
     // C R U D
+    
+    // Select 
+    private void selectAllService() 
+    {
+        /* Forward -> Pc    */ try {  programController.service_SelectAll(dgvService); } 
+        /* Catch Errors/Log */ catch (SQLException e) { System.out.println(e.getMessage()); }
+    } 
+    private void btnServiceShowAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServiceShowAllActionPerformed
+        selectAllService();
+    }//GEN-LAST:event_btnServiceShowAllActionPerformed
     
     // Add
     private void btnServiceAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServiceAddActionPerformed
@@ -939,16 +1271,6 @@ public class MainForm extends javax.swing.JFrame
         
     }//GEN-LAST:event_btnServiceUpdateActionPerformed
     
-    // Select 
-    private void selectAllService() 
-    {
-        /* Forward -> Pc    */ try {  programController.service_SelectAll(dgvService); } 
-        /* Catch Errors/Log */ catch (SQLException e) { System.out.println(e.getMessage()); }
-    } 
-    private void btnServiceShowAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServiceShowAllActionPerformed
-        selectAllService();
-    }//GEN-LAST:event_btnServiceShowAllActionPerformed
-
     // Remove
     private void btnServiceRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServiceRemoveActionPerformed
         
@@ -988,49 +1310,14 @@ public class MainForm extends javax.swing.JFrame
         
     }//GEN-LAST:event_btnServiceRemoveActionPerformed
 
-    ////////////////
-    //  Family    //
-    ////////////////
+    // --------------------------
     
-    // Remove
-    private void btnFamilyRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFamilyRemoveActionPerformed
-        
-        /* Data format verification bool */ boolean DataIsOk = true;
-        
-        // Verify data (by collecting it into an obj)
-        try 
-        {
-            // Capture data
-            /* Obj */ family = new Family();
-            /* Id  */ int Id = Integer.parseInt(txtFamilyRemoveId.getText()); family.setId(Id);
-        } 
-        // If wrong data format
-        catch (Exception e) 
-        { 
-            /* Set Bool    */ DataIsOk = false;
-            /* Console Log */ System.out.println("Unexpected Error while collecting data " + e.getMessage());
-            /* Inform User */ JOptionPane.showMessageDialog(null, "Unexpected Error while collecting data\nError Details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
-        }
-        // If correct data format
-        if (DataIsOk) 
-        {
-            // Show confirmation dialog
-            int choice = JOptionPane.showConfirmDialog(null, "Id to Remove: " + family.getId(), "Confirm Data", JOptionPane.YES_NO_OPTION);
-            // If user proceeds
-            if (choice == JOptionPane.YES_OPTION) 
-            {
-                /* Do process */ try {  programController.family_Remove(family); } catch (SQLException e) { System.out.println(e.getMessage()); }
-                
-                /* Reset text fields */ txtFamilyRemoveId.setText("");
-                
-                /* Refresh table */ selectAllFamily();
-            }
-            // If user cancels
-            else { /* Do nothing */ }  
-        }
-        
-    }//GEN-LAST:event_btnFamilyRemoveActionPerformed
-
+    ////////////////////
+    //  Add Family    //
+    ////////////////////
+    
+    // C R U D
+    
     // Select
     private void selectAllFamily() 
     {
@@ -1038,10 +1325,59 @@ public class MainForm extends javax.swing.JFrame
         /* Catch Errors/Log */ catch (SQLException e) { System.out.println(e.getMessage()); }
     }
     private void btnFamilyShowAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFamilyShowAllActionPerformed
-                
         selectAllFamily();
     }//GEN-LAST:event_btnFamilyShowAllActionPerformed
     
+    // Add
+    private void btnFamilyAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFamilyAddActionPerformed
+                
+        /* Data format verification bool */ boolean DataIsOk = true;
+        
+        // Verify data (by collecting it into an obj)
+        try 
+        {
+            // Capture data
+            /* Obj      */ family = new Family(); 
+            /* Name     */ family.setName(txtFamilyAddName.getText());
+            /* Contact  */ family.setContact(txtFamilyAddContact.getText());
+            /* Address  */ family.setAddress(txtFamilyAddAddress.getText());
+            /* Relation */ family.setRelation(txtFamilyAddRelation.getText());
+            /* Photo    */ family.setPhoto("None"); 
+        } 
+        // If wrong data format
+        catch (Exception e) 
+        { 
+            /* Set Bool     */ DataIsOk = false;
+            /* Console Log  */ System.out.println("Unexpected Error while collecting data" + e.getMessage());
+            /* Inform User  */ JOptionPane.showMessageDialog(null, "Unexpected Error while collecting data\nError Details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
+        }
+        // If correct data format
+        if (DataIsOk) 
+        {
+            // Show confirmation dialog
+            int choice = JOptionPane.showConfirmDialog(null, family.displayAllVariablesFor_Family_Add(), "Confirm Data", JOptionPane.YES_NO_OPTION);
+            // If user proceeds
+            if (choice == JOptionPane.YES_OPTION) 
+            {
+                /* Do process */ try { programController.family_Add(family); } catch (SQLException e) { System.out.println(e.getMessage()); }
+                
+                /* Reset text fields */
+                /* Name     */ txtFamilyAddName.setText("");
+                /* Contact  */ txtFamilyAddContact.setText("");
+                /* Address  */ txtFamilyAddAddress.setText("");
+                /* Relation */ txtFamilyAddRelation.setText("");
+                /* Photo    */ // Not implemented
+                
+                /* Refresh table */ selectAllFamily();
+                /* Refresh table */ selectAllSearch();
+                /* Refresh table */ selectAllSearchFamily();
+            }
+            // If user Cancels
+            else { /* Do nothing */ }              
+        }
+        
+    }//GEN-LAST:event_btnFamilyAddActionPerformed
+
     // Update
     private void btnFamilyUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFamilyUpdateActionPerformed
            
@@ -1091,54 +1427,391 @@ public class MainForm extends javax.swing.JFrame
         }
     }//GEN-LAST:event_btnFamilyUpdateActionPerformed
     
-    // Add
-    private void btnFamilyAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFamilyAddActionPerformed
-              
+    // Remove
+    private void btnFamilyRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFamilyRemoveActionPerformed
+    
         /* Data format verification bool */ boolean DataIsOk = true;
         
         // Verify data (by collecting it into an obj)
         try 
         {
             // Capture data
-            /* Obj      */ family = new Family(); 
-            /* Name     */ family.setName(txtFamilyAddName.getText());
-            /* Contact  */ family.setContact(txtFamilyAddContact.getText());
-            /* Address  */ family.setAddress(txtFamilyAddAddress.getText());
-            /* Relation */ family.setRelation(txtFamilyAddRelation.getText());
-            /* Photo    */ family.setPhoto("None"); 
+            /* Obj */ family = new Family();
+            /* Id  */ int Id = Integer.parseInt(txtFamilyRemoveId.getText()); family.setId(Id);
         } 
         // If wrong data format
         catch (Exception e) 
         { 
-            /* Set Bool     */ DataIsOk = false;
-            /* Console Log  */ System.out.println("Unexpected Error while collecting data" + e.getMessage());
-            /* Inform User  */ JOptionPane.showMessageDialog(null, "Unexpected Error while collecting data\nError Details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
+            /* Set Bool    */ DataIsOk = false;
+            /* Console Log */ System.out.println("Unexpected Error while collecting data " + e.getMessage());
+            /* Inform User */ JOptionPane.showMessageDialog(null, "Unexpected Error while collecting data\nError Details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
         }
         // If correct data format
         if (DataIsOk) 
         {
             // Show confirmation dialog
-            int choice = JOptionPane.showConfirmDialog(null, family.displayAllVariablesFor_Family_Add(), "Confirm Data", JOptionPane.YES_NO_OPTION);
+            int choice = JOptionPane.showConfirmDialog(null, "Id to Remove: " + family.getId(), "Confirm Data", JOptionPane.YES_NO_OPTION);
             // If user proceeds
             if (choice == JOptionPane.YES_OPTION) 
             {
-                /* Do process */ try { programController.family_Add(family); } catch (SQLException e) { System.out.println(e.getMessage()); }
+                /* Do process */ try {  programController.family_Remove(family); } catch (SQLException e) { System.out.println(e.getMessage()); }
                 
-                /* Reset text fields */
-                /* Name     */ txtFamilyAddName.setText("");
-                /* Contact  */ txtFamilyAddContact.setText("");
-                /* Address  */ txtFamilyAddAddress.setText("");
-                /* Relation */ txtFamilyAddRelation.setText("");
-                /* Photo    */ // Not implemented
+                /* Reset text fields */ txtFamilyRemoveId.setText("");
                 
                 /* Refresh table */ selectAllFamily();
             }
-            // If user Cancels
-            else { /* Do nothing */ }              
+            // If user cancels
+            else { /* Do nothing */ }  
         }
         
-    }//GEN-LAST:event_btnFamilyAddActionPerformed
+    }//GEN-LAST:event_btnFamilyRemoveActionPerformed
+    
+    // --------------------------
+    
+    ////////////////
+    //  Search    //
+    ////////////////
+    
+    // --------------------------
+    // For Family
+    // --------------------------
+    
+    // By ID
+    private void btnServiceFamilyFilterByIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServiceFamilyFilterByIdActionPerformed
+        
+        /* Data format verification bool */ boolean DataIsOk = true;
+        
+        // Verify data (by collecting it into an obj)
+        try 
+        {
+            // Capture data
+            /* Obj */ service = new Service();
+            /* Id  */ int Id = Integer.parseInt(txtServiceFamilyFilterById.getText()); service.setId(Id);
+        } 
+        // If wrong data format
+        catch (Exception e) 
+        { 
+            /* Set Bool    */ DataIsOk = false;
+            /* Console Log */ System.out.println("Unexpected Error while collecting data " + e.getMessage());
+        }
+        // If correct data format
+        if (DataIsOk) 
+        {
+            /* Do process */ try {  programController.search_SelectFamilyById(service, dgvSearch); } catch (SQLException e) { System.out.println(e.getMessage()); }
+        }
+        
+    }//GEN-LAST:event_btnServiceFamilyFilterByIdActionPerformed
+    
+    // By Table list (filter) (btn pressed)
+    private void btnServiceFamilyFilterByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServiceFamilyFilterByNameActionPerformed
+        
+        /* Data format verification bool */ boolean DataIsOk = true;
 
+        // Verify data (by collecting it into an obj)
+        try 
+        {
+            // Capture data
+            /* Obj  */ family = new Family();
+            /* Name */ family.setName(txtServiceFamilyFilterByName.getText());
+        } 
+        // If wrong data format
+        catch (Exception e) 
+        { 
+            /* Set Bool    */ DataIsOk = false;
+            /* Console Log */ System.out.println("Unexpected Error while collecting data " + e.getMessage());
+        }
+        // If correct data format
+        if (DataIsOk) 
+        {
+            /* Do process */ try {  programController.search_SelectFamilyByTableListFilter(family, dgvSearchFamily); } catch (SQLException e) { System.out.println(e.getMessage()); }
+        }
+    }//GEN-LAST:event_btnServiceFamilyFilterByNameActionPerformed
+
+    // By Table list (filter) (key pressed)
+    private void txtServiceFamilyFilterByNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtServiceFamilyFilterByNameKeyPressed
+       
+        /* Data format verification bool */ boolean DataIsOk = true;
+
+        // Verify data (by collecting it into an obj)
+        try 
+        {
+            // Capture data
+            /* Obj  */ family = new Family();
+            /* Name */ family.setName(txtServiceFamilyFilterByName.getText());
+        } 
+        // If wrong data format
+        catch (Exception e) { /*Set Bool*/ DataIsOk = false; /*Console Log*/ System.out.println("Unexpected Error while collecting data " + e.getMessage()); }
+        // If correct data format
+        if (DataIsOk) 
+        {
+            /* Do process */ 
+            try { programController.search_SelectFamilyByTableListFilter(family, dgvSearchFamily); } 
+            catch (SQLException e) { System.out.println(e.getMessage()); }
+            catch (Exception e)    { System.out.println(e.getMessage()); }
+        }
+        
+    }//GEN-LAST:event_txtServiceFamilyFilterByNameKeyPressed
+    
+    // By clicking on table list
+    private void dgvSearchFamilyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dgvSearchFamilyMouseClicked
+        
+        /* Data format verification bool */ boolean DataIsOk = true;
+        /* Obj to capture data           */ service = new Service();
+        
+        // Verify data (by collecting it into an obj)
+        try 
+        {
+            // Get the row index where the user clicked
+            int rowIndex = dgvSearchFamily.getSelectedRow();
+            if (rowIndex >= 0) 
+            {
+                /* Get value in Id column   */ int id = (int) dgvSearchFamily.getValueAt(rowIndex, 0);
+                /* Get value in Name column */ String name = (String) dgvSearchFamily.getValueAt(rowIndex, 1);
+
+                /* Set data into obj */ service.setId(id);
+                /* Set data into obj */ service.setGenericText(name);
+                
+                /* Console Log */ System.out.println(service.getId() + " " + service.getGenericText());
+            }
+        } 
+        // If wrong data format
+        catch (Exception e) 
+        { 
+            /* Set Bool    */ DataIsOk = false;
+            /* Console Log */ System.out.println("Unexpected Error while collecting data " + e.getMessage());
+        }
+        // If correct data format
+        if (DataIsOk) 
+        {
+            /* Do process */ try {  programController.search_SelectFamilyById(service, dgvSearch); } catch (SQLException e) { System.out.println(e.getMessage()); }
+        }
+    }//GEN-LAST:event_dgvSearchFamilyMouseClicked
+
+    // Fill Table list
+    private void selectAllSearchFamily()
+    {   
+        /* Fill table */ try { programController.search_SelectAllFamilyNames(dgvSearchFamily); } catch (Exception e) { System.out.println("Error: " + e.getMessage()); }
+    } 
+      
+    // --------------------------
+    // For Deceased
+    // --------------------------
+    
+    // By ID
+    private void btnServiceDeceasedFilterByIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServiceDeceasedFilterByIdActionPerformed
+        /* Data format verification bool */ boolean DataIsOk = true;
+        
+        // Verify data (by collecting it into an obj)
+        try 
+        {
+            // Capture data
+            /* Obj */ service = new Service();
+            /* Id  */ int Id = Integer.parseInt(txtServiceDeceasedFilterById.getText()); service.setId(Id);
+        } 
+        // If wrong data format
+        catch (Exception e) 
+        { 
+            /* Set Bool    */ DataIsOk = false;
+            /* Console Log */ System.out.println("Unexpected Error while collecting data " + e.getMessage());
+        }
+        // If correct data format
+        if (DataIsOk) 
+        {
+            /* Do process */ try {  programController.search_SelectDeceasedById(service, dgvSearch); } catch (SQLException e) { System.out.println(e.getMessage()); }
+        }
+    }//GEN-LAST:event_btnServiceDeceasedFilterByIdActionPerformed
+    
+    // By Table list (filter) (btn pressed)
+    private void btnServiceDeceasedFilterByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServiceDeceasedFilterByNameActionPerformed
+        /* Data format verification bool */ boolean DataIsOk = true;
+
+        // Verify data (by collecting it into an obj)
+        try 
+        {
+            // Capture data
+            /* Obj  */ deceased = new Deceased();
+            /* Name */ deceased.setName(txtServiceDeceasedFilterByName.getText());
+        } 
+        // If wrong data format
+        catch (Exception e) 
+        { 
+            /* Set Bool    */ DataIsOk = false;
+            /* Console Log */ System.out.println("Unexpected Error while collecting data " + e.getMessage());
+        }
+        // If correct data format
+        if (DataIsOk) 
+        {
+            /* Do process */ try {  programController.search_SelectDeceasedByTableListFilter(deceased, dgvSearchDeceased); } catch (SQLException e) { System.out.println(e.getMessage()); }
+        }
+    }//GEN-LAST:event_btnServiceDeceasedFilterByNameActionPerformed
+    
+    // By Table list (filter) (key pressed)
+    private void txtServiceDeceasedFilterByNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtServiceDeceasedFilterByNameKeyPressed
+        /* Data format verification bool */ boolean DataIsOk = true;
+
+        // Verify data (by collecting it into an obj)
+        try 
+        {
+            // Capture data
+            /* Obj  */ deceased = new Deceased();
+            /* Name */ deceased.setName(txtServiceDeceasedFilterByName.getText());
+        } 
+        // If wrong data format
+        catch (Exception e) 
+        { 
+            /* Set Bool    */ DataIsOk = false;
+            /* Console Log */ System.out.println("Unexpected Error while collecting data " + e.getMessage());
+        }
+        // If correct data format
+        if (DataIsOk) 
+        {
+            /* Do process */ try {  programController.search_SelectDeceasedByTableListFilter(deceased, dgvSearchDeceased); } catch (SQLException e) { System.out.println(e.getMessage()); }
+        }
+    }//GEN-LAST:event_txtServiceDeceasedFilterByNameKeyPressed
+    
+    // By clicking on table list
+    private void dgvSearchDeceasedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dgvSearchDeceasedMouseClicked
+        
+        /* Data format verification bool */ boolean DataIsOk = true;
+        /* Obj to capture data           */ service = new Service();
+        
+        // Verify data (by collecting it into an obj)
+        try 
+        {
+            // Get the row index where the user clicked
+            int rowIndex = dgvSearchDeceased.getSelectedRow();
+            if (rowIndex >= 0) 
+            {
+                /* Get value in Id column   */ int id = (int) dgvSearchDeceased.getValueAt(rowIndex, 0);
+                /* Get value in Name column */ String name = (String) dgvSearchDeceased.getValueAt(rowIndex, 1);
+
+                /* Set data into obj */ service.setId(id);
+                /* Set data into obj */ service.setGenericText(name);
+                
+                /* Console Log */ System.out.println(service.getId() + " " + service.getGenericText());
+            }
+        } 
+        // If wrong data format
+        catch (Exception e) 
+        { 
+            /* Set Bool    */ DataIsOk = false;
+            /* Console Log */ System.out.println("Unexpected Error while collecting data " + e.getMessage());
+        }
+        // If correct data format
+        if (DataIsOk) 
+        {
+            /* Do process */ try {  programController.search_SelectDeceasedById(service, dgvSearch); } catch (SQLException e) { System.out.println(e.getMessage()); }
+        }
+    }//GEN-LAST:event_dgvSearchDeceasedMouseClicked
+
+    // Fill Table list
+    private void selectAllSearchDeceased()
+    {   
+        /* Fill table */ try { programController.search_SelectAllDeceasedNames(dgvSearchDeceased); } catch (Exception e) { System.out.println("Error: " + e.getMessage()); }
+    } 
+    
+    // --------------------------
+    // For Services
+    // --------------------------
+    
+    // Select
+    private void selectAllSearch()
+    {
+        /* Forward -> Pc    */ try {  programController.search_SelectAll(dgvSearch); } 
+        /* Catch Errors/Log */ catch (SQLException e) { System.out.println(e.getMessage()); }
+    }
+    
+    // Filter
+    private void btnServiceServiceFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServiceServiceFilterActionPerformed
+        /* Data format verification bool */ boolean DataIsOk = true;
+        
+        /* Obj */ service = new Service();
+        
+        // Verify data (by collecting it into an obj)
+        try 
+        {         
+            // --------------------------
+            // See if checkboxs are selected
+            // --------------------------
+            
+            // Id
+            if (chkServiceIdFilter.isSelected()) 
+            {   
+                // Using the object to make sure it's the correct variable type
+                int Id = Integer.parseInt(txtServiceServiceFilterByID.getText()); 
+                // Convert to String
+                String strId = String.valueOf(Id);
+                service.setGenericText(strId);  
+            } 
+            /* No Id checkbox */ else { service.setGenericText("%"); }
+            
+            // Date
+            if (chkServiceDateFilter.isSelected() ) 
+            { 
+                // Using the object to make sure it's the correct variable type
+                Date selectedDate = new Date(dtpServiceDateFilter.getDate().getTime());
+                service.setDate(selectedDate);
+                // Convert to String
+                String strDate = String.valueOf(selectedDate);
+                service.setGenericText2(strDate);
+            } 
+            /* No Date checkbox */ else { service.setGenericText2("%-%-%"); };
+            
+            // CheckPay
+            if (chkServicePayedFilter.isSelected()) { 
+                /* Check Yes Pay        */ if (rdServicePayYes.isSelected()) { service.setGenericText3("1"); } 
+                /* Check No Pay         */ else { service.setGenericText3("0");} 
+            }   /* No CheckPay checkbox */ else { service.setGenericText3("%"); }
+            
+            /* Console Log */ System.out.println
+            (
+                    "------------------------\n"
+                  + "Search by Filter Button:\n"
+                  + "<!> Non-selected Checkboxes return a SQL wildcard. Like so '%'\n"
+                  + "CHECKBOX STATUS\n"
+                  + "   Id: " + chkServiceIdFilter.isSelected() + "   Date: " + chkServiceDateFilter.isSelected() + "   Pay: " + chkServicePayedFilter.isSelected() + "\n"
+                  + "VALUES\n"
+                  + "   Id: " + service.getGenericText() + "   Date: " + service.getGenericText2() + "   Pay: " + service.getGenericText3() + "\n"
+                  + "------------------------"
+            );
+        } 
+        // If wrong data format
+        catch (NullPointerException e)
+        { 
+            /* Set Bool    */ DataIsOk = false;
+            /* Console Log */ System.out.println("Null Pointer Exception " + e.getMessage());
+        }
+        catch (Exception e) 
+        { 
+            /* Set Bool    */ DataIsOk = false;
+            /* Console Log */ System.out.println("Unexpected Error while collecting data " + e.getMessage());
+        }
+        // If correct data format
+        if (DataIsOk) 
+        {
+            /* Do process */ try {  programController.search_Filter(service, dgvSearch); } catch (SQLException e) { System.out.println(e.getMessage()); }
+        }
+    }//GEN-LAST:event_btnServiceServiceFilterActionPerformed
+    
+    // RADIAL BUTTON (Payed) Yes
+    private void rdServicePayYesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdServicePayYesActionPerformed
+        rdServicePayYes.setSelected(true);
+        rdServicePayNo.setSelected(false);
+    }//GEN-LAST:event_rdServicePayYesActionPerformed
+    
+    // RADIAL BUTTON (Payed) No  
+    private void rdServicePayNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdServicePayNoActionPerformed
+        rdServicePayNo.setSelected(true);
+        rdServicePayYes.setSelected(false);
+    }//GEN-LAST:event_rdServicePayNoActionPerformed
+
+    // Show All
+    private void btnServiceServiceShowAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServiceServiceShowAllActionPerformed
+        selectAllSearch();
+    }//GEN-LAST:event_btnServiceServiceShowAllActionPerformed
+
+    // --------------------------
+    
     // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     // Main "Run Application"
     // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -1193,16 +1866,36 @@ public class MainForm extends javax.swing.JFrame
     private javax.swing.JButton btnFamilyShowAll;
     private javax.swing.JButton btnFamilyUpdate;
     private javax.swing.JButton btnServiceAdd;
+    private javax.swing.JButton btnServiceDeceasedFilterById;
+    private javax.swing.JButton btnServiceDeceasedFilterByName;
+    private javax.swing.JButton btnServiceFamilyFilterById;
+    private javax.swing.JButton btnServiceFamilyFilterByName;
     private javax.swing.JButton btnServiceRemove;
+    private javax.swing.JButton btnServiceServiceFilter;
+    private javax.swing.JButton btnServiceServiceShowAll;
     private javax.swing.JButton btnServiceShowAll;
     private javax.swing.JButton btnServiceUpdate;
     private javax.swing.JCheckBox chkServiceAddPayed;
+    private javax.swing.JCheckBox chkServiceDateFilter;
+    private javax.swing.JCheckBox chkServiceIdFilter;
+    private javax.swing.JCheckBox chkServicePayedFilter;
     private javax.swing.JCheckBox chkServiceUpdatePayed;
     private javax.swing.JTable dgvDeceased;
     private javax.swing.JTable dgvFamily;
+    private javax.swing.JTable dgvSearch;
+    private javax.swing.JTable dgvSearchDeceased;
+    private javax.swing.JTable dgvSearchFamily;
     private javax.swing.JTable dgvService;
     private com.toedter.calendar.JDateChooser dtpServiceAdd;
+    private com.toedter.calendar.JDateChooser dtpServiceDateFilter;
     private com.toedter.calendar.JDateChooser dtpServiceUpdate;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
@@ -1242,31 +1935,45 @@ public class MainForm extends javax.swing.JFrame
     private javax.swing.JLabel jLabel84;
     private javax.swing.JLabel jLabel85;
     private javax.swing.JLabel jLabel86;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JPopupMenu jPopupMenu1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator11;
     private javax.swing.JSeparator jSeparator12;
     private javax.swing.JSeparator jSeparator13;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JMenu menu;
+    private javax.swing.JMenuItem menu_AboutSaf;
+    private javax.swing.JMenuItem menu_Exit;
+    private javax.swing.JPanel panelSearch;
     private javax.swing.JRadioButton rdDeceasedAddSexF;
     private javax.swing.JRadioButton rdDeceasedAddSexM;
     private javax.swing.JRadioButton rdDeceasedUpdateSexF;
     private javax.swing.JRadioButton rdDeceasedUpdateSexM;
+    private javax.swing.JRadioButton rdServicePayNo;
+    private javax.swing.JRadioButton rdServicePayYes;
     private javax.swing.JTextField txtDeceasedAddAge;
     private javax.swing.JTextField txtDeceasedAddComment;
     private javax.swing.JTextField txtDeceasedAddName;
@@ -1289,7 +1996,12 @@ public class MainForm extends javax.swing.JFrame
     private javax.swing.JTextField txtServiceAddDeceasedId;
     private javax.swing.JTextField txtServiceAddFamilyId;
     private javax.swing.JTextField txtServiceAddPrice;
+    private javax.swing.JTextField txtServiceDeceasedFilterById;
+    private javax.swing.JTextField txtServiceDeceasedFilterByName;
+    private javax.swing.JTextField txtServiceFamilyFilterById;
+    private javax.swing.JTextField txtServiceFamilyFilterByName;
     private javax.swing.JTextField txtServiceRemoveId;
+    private javax.swing.JTextField txtServiceServiceFilterByID;
     private javax.swing.JTextField txtServiceUpdateComment;
     private javax.swing.JTextField txtServiceUpdateDeceasedId;
     private javax.swing.JTextField txtServiceUpdateFamilyId;

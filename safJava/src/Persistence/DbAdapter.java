@@ -36,7 +36,7 @@ public class DbAdapter
     
     // C R U D
 
-   // Select All - Retrieves all records from DB and populates a JTable with the information
+    // Select All - Retrieves all records from DB and populates a JTable with the information
     public void deceased_SelectAll(JTable table) throws SQLException 
     {
         /* Open db connection */ Connection connection = connectionManager.getConnection();
@@ -161,6 +161,8 @@ public class DbAdapter
         /* Catch Errors and log */ catch (SQLException e) { System.out.println(e.getMessage()); }
         /* Close db connection  */ finally { ConnectionManager.closeConnection(); }
     }
+    
+    // -----------------------
     
     ////////////////
     //  Family    //
@@ -294,6 +296,7 @@ public class DbAdapter
         /* Close db connection  */ finally { ConnectionManager.closeConnection(); }
     }
     
+    // -----------------------
     
     ////////////////
     //  Service   //
@@ -301,8 +304,10 @@ public class DbAdapter
     
     // C R U D
     
-    // Select All - Retrieves all records from DB and populates a JTable with the information
-     public void service_SelectAll(JTable table) throws SQLException 
+    /* Select All 
+       Retrieves all records from the Service table in the DB 
+       and populates a JTable with the information */
+    public void service_SelectAll(JTable table) throws SQLException 
     {
         /* Open db connection */ Connection connection = connectionManager.getConnection();
         
@@ -372,7 +377,8 @@ public class DbAdapter
         /* Close db connection  */ finally { connectionManager.closeConnection(); }
     }
   
-    // Add - Add new record to Data Base
+    /* Add
+       Adds a new record to the Service table in the DB */
     public void service_Add(Service obj) throws SQLException  
     {   
         /* Open db connection */ Connection connection = connectionManager.getConnection();
@@ -394,7 +400,8 @@ public class DbAdapter
         /* Close db connection  */ finally { ConnectionManager.closeConnection(); }
     }
     
-    // Update - Update record in Data Base
+    /* Update
+       Updates a record in the Service table in the DB */
     public void service_Update(Service obj) throws SQLException 
     {
         /* Open db connection */ Connection connection = connectionManager.getConnection();
@@ -417,7 +424,8 @@ public class DbAdapter
         /* Close db connection  */ finally { ConnectionManager.closeConnection(); }
     }
    
-    // Remove - Remove record in Data Base
+    /* Remove
+       Removes a record in the Service table in the DB */
     public void service_Remove(Service obj) throws SQLException 
     {
         /* Prepare query */ Connection connection = connectionManager.getConnection();
@@ -432,6 +440,550 @@ public class DbAdapter
         } 
         /* Catch Errors and log */ catch (SQLException e) { System.out.println(e.getMessage()); }
         /* Close db connection  */ finally { ConnectionManager.closeConnection(); }
+    }
+    
+    // -----------------------
+    
+    ////////////////
+    //  Search    //
+    ////////////////
+    
+    // --------------------------
+    // For Family
+    // --------------------------
+    
+    /* By ID
+       Retrieves all records with a specific Id from the Service table in the DB 
+       and populates a JTable with the information */
+    public void search_SelectFamilyById(Service obj, JTable table) throws SQLException 
+    {
+        
+        /* Open db connection */ Connection connection = connectionManager.getConnection();
+        
+        /* model obj (to store the db data) */ DefaultTableModel model = new DefaultTableModel();
+        
+        // Set column names in model for the table
+        model.setColumnIdentifiers ( 
+            new Object[] 
+            { 
+                "ID", 
+                "FamilyId", 
+                "DeceasedId", 
+                "Comment", 
+                "Date", 
+                "Price",
+                "CheckPay"
+            });
+
+        try 
+        {
+            // List to be used later to fill the data base 
+            List<Service> serviceList = new ArrayList<>();
+
+            /* Prepare query   */ PreparedStatement pt = connection.prepareStatement
+                                (
+                                    "SELECT * " +
+                                    "FROM Service " +
+                                    "JOIN Family ON Service.FamilyId = Family.Id " +
+                                    "JOIN Deceased ON Service.DeceasedId = Deceased.Id " +
+                                    "WHERE Family.Id = ?"
+                                );
+            
+            /* Query variables */ pt.setInt(1, obj.getId());
+            /* Execute query   */ ResultSet rs = pt.executeQuery(); 
+
+            // Iterate through results from query 
+            while (rs.next()) 
+            {
+                // The process here: 
+                // ResultSet -> variables -> object -> ArrayList
+                
+                // Create variables (from ResultSet)
+                /* Id           */ int id = rs.getInt("Id");
+                /* Family Id    */ int fmId = rs.getInt("FamilyId");
+                /* Deceased Id  */ int dcId = rs.getInt("DeceasedId");
+                /* Comment      */ String comment = rs.getString("Comment");
+                /* Date         */ Date date = rs.getDate("Date");
+                /* Price        */ double price = rs.getDouble("Price");
+                /* CheckPay     */ boolean checkPay = rs.getBoolean("CheckPay");
+                
+                // Create obj (from variables)
+                /* Obj         */ Service service = new Service();
+                /* Id          */ service.setId(id);
+                /* Family Id   */ service.setFamilyID(fmId);
+                /* Deceased Id */ service.setDeceasedID(dcId);
+                /* Comment     */ service.setComment(comment);
+                /* Date        */ service.setDate(date);
+                /* Price       */ service.setPrice(price);
+                /* CheckPay    */ service.setCheckPay(checkPay);
+
+                // Add obj to list
+                serviceList.add(service);
+            }
+            
+            // Add row to the DefaultTableModel (model)
+            for (Service service : serviceList) {
+            model.addRow(new Object[]{service.getId(), service.getFamilyID(), service.getDeceasedID(), service.getComment(), service.getDate(), service.getPrice(), service.isCheckPay()});
+        }
+            
+            // Set the model to the JTable
+            table.setModel(model);
+        } 
+        /* Catch Errors and log */ catch (SQLException e) { System.out.println(e.getMessage()); } 
+        /* Close db connection  */ finally { connectionManager.closeConnection(); }
+    }
+    
+    /* By Table list (filter)
+       Retrieves all records that match a specific name (using wildcard)from the Service table
+       and populates a JTable with the information */
+    public void search_SelectFamilyByTableListFilter(Family obj, JTable table) throws SQLException {
+        
+        /* Open db connection */  Connection connection = connectionManager.getConnection();
+        
+        /* model obj (to store the db data) */  DefaultTableModel model = new DefaultTableModel();
+        /* Set the model's column names to match the table */ model.setColumnIdentifiers ( new Object[] { "Id", "Name" });
+
+        try 
+        {  
+            /* Prepare query   */ PreparedStatement pt = connection.prepareStatement ( "SELECT Family.Id, Family.Name FROM Family WHERE Family.Name like?;" );
+            /* Query variables */ pt.setString(1, "%" + obj.getName() + "%");
+            /* Execute query   */ ResultSet rs = pt.executeQuery(); 
+            
+            /* List to be used to fill the model */ List<Family> familyList = new ArrayList<>();
+            
+            // Iterate through results from query
+            while (rs.next()) // The process here: ResultSet -> var -> obj -> ArrayList
+            {
+                // From ResultSet, create variables
+                /* Id   */ int id = rs.getInt("Id");
+                /* Name */ String name = rs.getString("Name");
+
+                // From variables, create obj
+                /* Obj  */ Family family = new Family();
+                /* Id   */ family.setId(id);
+                /* Name */ family.setName(name);
+
+                // Add obj to list
+                familyList.add(family);
+            }
+
+            // Create a new table model
+            DefaultTableModel newModel = new DefaultTableModel();
+            newModel.setColumnIdentifiers(new Object[] {"Id", "Name"});
+
+            // Add the data to the new table model
+            for (Family family : familyList) {
+                newModel.addRow(new Object[]{family.getId(), family.getName()});
+            }
+
+            // Set the new table model to the table
+            table.setModel(newModel);
+            table.revalidate();
+            table.repaint();
+        } 
+        /* Catch Errors and log */ catch (SQLException e) { System.out.println("Error: " + e.getMessage()); } 
+        /* Close db connection  */ finally { connectionManager.closeConnection(); }
+      
+        
+    }
+    
+    /* Fill Table list 
+       Retrieves all records from the Service table in the data base
+       and populates a JTable with the information */
+    public void search_SelectAllFamilyNames(JTable table) throws SQLException {
+        
+        /* Open db connection */ Connection connection = connectionManager.getConnection();
+        
+        /* Create model obj (to store the db data)         */ DefaultTableModel model = new DefaultTableModel();
+        /* Set the model's column names to match the table */ model.setColumnIdentifiers ( new Object[] { "Id", "Name" } );
+
+        try {
+            
+            /* List to be used later to fill the data base */ List<Family> familyList = new ArrayList<>();
+
+            /* Prepare query */ PreparedStatement pt = connection.prepareStatement("SELECT * FROM Family");
+            /* Execute query */ ResultSet rs = pt.executeQuery(); 
+
+            // Iterate through results from query 
+            while (rs.next()) // The process here: ResultSet -> var -> obj -> ArrayList
+            {
+                // From ResultSet, create variables
+                /* Id   */ int id = rs.getInt("Id");
+                /* Name */ String name = rs.getString("Name");
+                
+                // From variables, create obj
+                /* Obj  */ Family family = new Family();
+                /* Id   */ family.setId(id);
+                /* Name */ family.setName(name);
+
+                // Add obj to list
+                familyList.add(family);
+            }
+            
+            /* Add row to the DefaultTableModel (model) */ for (Family family : familyList) { model.addRow(new Object[]{ family.getId(), family.getName() }); }
+            /* Set the model to the JTable              */ table.setModel(model);
+        } 
+        /* Catch Errors and log */ catch (SQLException e) { System.out.println(e.getMessage()); } 
+        /* Close db connection  */ finally { connectionManager.closeConnection(); }
+    }
+    
+    // --------------------------
+    // For Deceased
+    // --------------------------
+    
+    /* By ID
+       Retrieves all records from the Service table in the DB with a specific Id 
+       and populates a JTable with the information */
+    public void search_SelectDeceasedById(Service obj, JTable table) throws SQLException 
+    {
+        
+        /* Open db connection */ Connection connection = connectionManager.getConnection();
+        
+        /* model obj (to store the db data) */ DefaultTableModel model = new DefaultTableModel();
+        
+        // Set column names in model for the table
+        model.setColumnIdentifiers ( 
+            new Object[] 
+            { 
+                "ID", 
+                "FamilyId", 
+                "DeceasedId", 
+                "Comment", 
+                "Date", 
+                "Price",
+                "CheckPay"
+            });
+
+        try 
+        {
+            // List to be used later to fill the data base 
+            List<Service> serviceList = new ArrayList<>();
+
+            /* Prepare query   */ PreparedStatement pt = connection.prepareStatement
+                                (
+                                    "SELECT * " +
+                                    "FROM Service " +
+                                    "JOIN Family ON Service.FamilyId = Family.Id " +
+                                    "JOIN Deceased ON Service.DeceasedId = Deceased.Id " +
+                                    "WHERE Deceased.Id = ?"
+                                );
+            
+            /* Query variables */ pt.setInt(1, obj.getId());
+            /* Execute query   */ ResultSet rs = pt.executeQuery(); 
+
+            // Iterate through results from query 
+            while (rs.next()) 
+            {
+                // The process here: 
+                // ResultSet -> variables -> object -> ArrayList
+                
+                // Create variables (from ResultSet)
+                /* Id           */ int id = rs.getInt("Id");
+                /* Family Id    */ int fmId = rs.getInt("FamilyId");
+                /* Deceased Id  */ int dcId = rs.getInt("DeceasedId");
+                /* Comment      */ String comment = rs.getString("Comment");
+                /* Date         */ Date date = rs.getDate("Date");
+                /* Price        */ double price = rs.getDouble("Price");
+                /* CheckPay     */ boolean checkPay = rs.getBoolean("CheckPay");
+                
+                // Create obj (from variables)
+                /* Obj         */ Service service = new Service();
+                /* Id          */ service.setId(id);
+                /* Family Id   */ service.setFamilyID(fmId);
+                /* Deceased Id */ service.setDeceasedID(dcId);
+                /* Comment     */ service.setComment(comment);
+                /* Date        */ service.setDate(date);
+                /* Price       */ service.setPrice(price);
+                /* CheckPay    */ service.setCheckPay(checkPay);
+
+                // Add obj to list
+                serviceList.add(service);
+            }
+            
+            // Add row to the DefaultTableModel (model)
+            for (Service service : serviceList) {
+            model.addRow(new Object[]{service.getId(), service.getFamilyID(), service.getDeceasedID(), service.getComment(), service.getDate(), service.getPrice(), service.isCheckPay()});
+        }
+            
+            // Set the model to the JTable
+            table.setModel(model);
+        } 
+        /* Catch Errors and log */ catch (SQLException e) { System.out.println(e.getMessage()); } 
+        /* Close db connection  */ finally { connectionManager.closeConnection(); }
+    }
+   
+    /* By Table list (filter)
+       Retrieves all records that match a specific name (using wildcard)
+       Populates a JTable with the information */
+    public void search_SelectDeceasedByTableListFilter(Deceased obj, JTable table) throws SQLException {
+        
+        /* Open db connection */  Connection connection = connectionManager.getConnection();
+        
+        /* model obj (to store the db data) */  DefaultTableModel model = new DefaultTableModel();
+        /* Set the model's column names to match the table */ model.setColumnIdentifiers ( new Object[] { "Id", "Name" });
+
+        try 
+        {  
+            /* Prepare query   */ PreparedStatement pt = connection.prepareStatement ( "SELECT Deceased.Id, Deceased.Name FROM Deceased WHERE Deceased.Name like?;" );
+            /* Query variables */ pt.setString(1, "%" + obj.getName() + "%");
+            /* Execute query   */ ResultSet rs = pt.executeQuery(); 
+            
+            /* List to be used to fill the model */ List<Deceased> deceasedList = new ArrayList<>();
+            
+            // Iterate through results from query
+            while (rs.next()) // The process here: ResultSet -> var -> obj -> ArrayList
+            {
+                // From ResultSet, create variables
+                /* Id   */ int id = rs.getInt("Id");
+                /* Name */ String name = rs.getString("Name");
+
+                // From variables, create obj
+                /* Obj  */ Deceased deceased = new Deceased();
+                /* Id   */ deceased.setId(id);
+                /* Name */ deceased.setName(name);
+
+                // Add obj to list
+                deceasedList.add(deceased);
+            }
+
+            // Create a new table model
+            DefaultTableModel newModel = new DefaultTableModel();
+            newModel.setColumnIdentifiers(new Object[] {"Id", "Name"});
+
+            // Add the data to the new table model
+            for (Deceased deceased : deceasedList) {
+                newModel.addRow(new Object[]{deceased.getId(), deceased.getName()});
+            }
+
+            // Set the new table model to the table
+            table.setModel(newModel);
+            table.revalidate();
+            table.repaint();
+        } 
+        /* Catch Errors and log */ catch (SQLException e) { System.out.println("Error: " + e.getMessage()); } 
+        /* Close db connection  */ finally { connectionManager.closeConnection(); }
+      
+        
+    }
+   
+    /* Fill Table list 
+       Retrieves all records from the Service table in DB
+       Populates a JTable with the information */
+    public void search_SelectAllDeceasedNames(JTable table) throws SQLException 
+    {
+        /* Open db connection */ Connection connection = connectionManager.getConnection();
+        
+        /* model obj (to store the db data) */ DefaultTableModel model = new DefaultTableModel();
+        
+        // Set column names in model for the table
+        model.setColumnIdentifiers
+        ( 
+            new Object[] 
+            { 
+                "ID", 
+                "Name"
+            } 
+        );
+
+        try 
+        {
+            // List to be used later to fill the data base 
+            List<Deceased> deceasedList = new ArrayList<>();
+
+            /* Prepare query */ PreparedStatement pt = connection.prepareStatement("SELECT * FROM Deceased");
+            /* Execute query */ ResultSet rs = pt.executeQuery(); 
+
+            // Iterate through results from query 
+            while (rs.next()) 
+            {
+                // The process here: 
+                // ResultSet -> var -> obj -> ArrayList
+                
+                // Create variables (from ResultSet)
+                /* Id      */ int id = rs.getInt("Id");
+                /* Name    */ String name = rs.getString("Name");
+                
+                // Create obj (from variables)
+                /* Obj     */ Deceased deceased = new Deceased();
+                /* Id      */ deceased.setId(id);
+                /* Name    */ deceased.setName(name);
+
+                // Add obj to list
+                deceasedList.add(deceased);
+            }
+            
+            // Add row to the DefaultTableModel (model)
+            for (Deceased deceased : deceasedList) { model.addRow(new Object[]{deceased.getId(), deceased.getName()}); }
+            
+            // Set the model to the JTable
+            table.setModel(model);
+        } 
+        /* Catch Errors and log */ catch (SQLException e) { System.out.println(e.getMessage()); } 
+        /* Close db connection  */ finally { connectionManager.closeConnection(); }
+    }
+       
+    // --------------------------
+    // For Services
+    // --------------------------
+
+    /* Filter (button)
+       Retrieves all records that match a specific criteria (using wildcards)
+       Populates a JTable with the information */
+    public void search_Filter(Service obj, JTable table) throws SQLException 
+    {
+        /* Open db connection */ Connection connection = connectionManager.getConnection();
+
+        /* model obj (to store the db data) */ DefaultTableModel model = new DefaultTableModel();
+
+        // Set column names in model for the table
+        model.setColumnIdentifiers
+        ( 
+            new Object[] 
+            { 
+                "ID", 
+                "FamilyId", 
+                "DeceasedId", 
+                "Comment", 
+                "Date", 
+                "Price",
+                "CheckPay"
+            } 
+        );
+
+        try 
+        {
+            // List to be used later to fill the data base 
+            List<Service> serviceList = new ArrayList<>();
+
+            /* Prepare query   */ 
+            PreparedStatement pt = connection.prepareStatement
+            (
+                "SELECT * " +
+                "FROM Service " +
+                "WHERE Service.Id LIKE ?" +
+                "AND Service.Date LIKE ?" +
+                "AND Service.CheckPay LIKE ?"
+            );
+            
+            /* Query variables */ 
+            /* Id       */ pt.setString(1, obj.getGenericText());
+            /* Date     */ pt.setString(2, obj.getGenericText2());
+            /* PayCheck */ pt.setString(3, obj.getGenericText3());
+            
+            /* Execute query */ ResultSet rs = pt.executeQuery(); 
+            
+            // Iterate through results from query 
+            while (rs.next()) 
+            {
+                // The process here: 
+                // ResultSet -> variables -> object -> ArrayList
+                
+                // Create variables (from ResultSet)
+                /* Id           */ int id = rs.getInt("Id");
+                /* Family Id    */ int fmId = rs.getInt("FamilyId");
+                /* Deceased Id  */ int dcId = rs.getInt("DeceasedId");
+                /* Comment      */ String comment = rs.getString("Comment");
+                /* Date         */ Date date = rs.getDate("Date");
+                /* Price        */ double price = rs.getDouble("Price");
+                /* CheckPay     */ boolean checkPay = rs.getBoolean("CheckPay");
+                
+                // Create obj (from variables)
+                /* Obj         */ Service service = new Service();
+                /* Id          */ service.setId(id);
+                /* Family Id   */ service.setFamilyID(fmId);
+                /* Deceased Id */ service.setDeceasedID(dcId);
+                /* Comment     */ service.setComment(comment);
+                /* Date        */ service.setDate(date);
+                /* Price       */ service.setPrice(price);
+                /* CheckPay    */ service.setCheckPay(checkPay);
+
+                // Add obj to list
+                serviceList.add(service);
+            }
+            
+            // Add row to the DefaultTableModel (model)
+            for (Service service : serviceList) 
+            {
+                model.addRow(new Object[]{service.getId(), service.getFamilyID(), service.getDeceasedID(), service.getComment(), service.getDate(), service.getPrice(), service.isCheckPay()});
+            }
+            
+            // Set the model to the JTable
+            table.setModel(model);
+
+        } 
+        /* Catch Errors and log */ catch (SQLException e) { System.out.println(e.getMessage()); } 
+        /* Close db connection  */ finally { connectionManager.closeConnection(); }
+    }
+    
+    /* Show All (button)
+       Retrieves all records from the Service table 
+       Populates a JTable with the information */
+    public void search_SelectAll(JTable table) throws SQLException 
+    {
+        /* Open db connection */ Connection connection = connectionManager.getConnection();
+
+        /* model obj (to store the db data) */ DefaultTableModel model = new DefaultTableModel();
+
+        // Set column names in model for the table
+        model.setColumnIdentifiers
+        ( 
+            new Object[] 
+            { 
+                "ID", 
+                "FamilyId", 
+                "DeceasedId", 
+                "Comment", 
+                "Date", 
+                "Price",
+                "CheckPay"
+            } 
+        );
+
+        try 
+        {
+            // List to be used later to fill the data base 
+            List<Service> serviceList = new ArrayList<>();
+
+            /* Prepare query */ PreparedStatement pt = connection.prepareStatement("SELECT * FROM Service");
+            /* Execute query */ ResultSet rs = pt.executeQuery(); 
+
+            // Iterate through results from query 
+            while (rs.next()) 
+            {
+                // The process here: 
+                // ResultSet -> var -> obj -> ArrayList
+
+                // Create variables (from ResultSet)
+                /* Id           */ int id = rs.getInt("Id");
+                /* Family Id    */ int fmId = rs.getInt("FamilyId");
+                /* Deceased Id  */ int dcId = rs.getInt("DeceasedId");
+                /* Comment      */ String comment = rs.getString("Comment");
+                /* Date         */ Date date = rs.getDate("Date");
+                /* Price        */ double price = rs.getDouble("Price");
+                /* CheckPay     */ boolean checkPay = rs.getBoolean("CheckPay");
+
+                // Create obj (from variables)
+                /* Obj         */ Service service = new Service();
+                /* Id          */ service.setId(id);
+                /* Family Id   */ service.setFamilyID(fmId);
+                /* Deceased Id */ service.setDeceasedID(dcId);
+                /* Comment     */ service.setComment(comment);
+                /* Date        */ service.setDate(date);
+                /* Price       */ service.setPrice(price);
+                /* CheckPay    */ service.setCheckPay(checkPay);
+
+                // Add obj to list
+                serviceList.add(service);
+            }
+
+            // Add row to the DefaultTableModel (model)
+            for (Service service : serviceList) { model.addRow(new Object[]{service.getId(), service.getFamilyID(), service.getDeceasedID(), service.getComment(), service.getDate(), service.getPrice(), service.isCheckPay()}); }
+
+            // Set the model to the JTable
+            table.setModel(model);
+        } 
+        /* Catch Errors and log */ catch (SQLException e) { System.out.println(e.getMessage()); } 
+        /* Close db connection  */ finally { connectionManager.closeConnection(); }
     }
     
 }
