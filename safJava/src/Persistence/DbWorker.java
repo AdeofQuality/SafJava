@@ -3,6 +3,8 @@ package Persistence;
 import Persistence.DbAdapter;
 import Business.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.JList;
 import javax.swing.JTable;
 
 // @author efapro01.23 Roberto Carvalho
@@ -59,4 +61,29 @@ public class DbWorker
     /* Update */ public void service_Update(Service obj)     throws SQLException { dbAdapter.service_Update(obj); }
     /* Remove */ public void service_Remove(Service obj)     throws SQLException { dbAdapter.service_Remove(obj); }
     
+    ////////////////
+    //  Search    //
+    ////////////////
+    
+    // --------------------------
+    // For Family
+    // --------------------------
+    /* Fill table             */ public void search_SelectAllFamilyNames(JTable table)                      throws SQLException { dbAdapter.search_SelectAllFamilyNames(table); }
+    /* By ID                  */ public void search_SelectFamilyById(Service obj, JTable table)             throws SQLException { dbAdapter.search_SelectFamilyById(obj, table); }
+    /* By Table list (filter) */ public void search_SelectFamilyByTableListFilter(Family obj, JTable table) throws SQLException { dbAdapter.search_SelectFamilyByTableListFilter(obj, table); }  
+    
+    
+    // --------------------------
+    // For Deceased
+    // --------------------------
+    /* Fill table             */ public void search_SelectAllDeceasedNames(JTable table)                        throws SQLException { dbAdapter.search_SelectAllDeceasedNames(table); }
+    /* By ID                  */ public void search_SelectDeceasedById(Service obj, JTable table)               throws SQLException { dbAdapter.search_SelectDeceasedById(obj, table); }
+    /* By Table list (filter) */ public void search_SelectDeceasedByTableListFilter(Deceased obj, JTable table) throws SQLException { dbAdapter.search_SelectDeceasedByTableListFilter(obj, table); }  
+    
+    
+    // --------------------------
+    // For Services
+    // --------------------------
+    /* Filter        */ public void search_Filter(Service obj, JTable table) throws SQLException { dbAdapter.search_Filter(obj, table); }
+    /* Show All      */ public void search_SelectAll(JTable table)           throws SQLException { dbAdapter.search_SelectAll(table); }
 }

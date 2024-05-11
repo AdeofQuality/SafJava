@@ -15,6 +15,7 @@ public class ConnectionManager
     private static final String USERNAME = "Raquel";
     private static final String PASSWORD = "Silva1234";
     private static Connection connection;
+    private static int counter;
     
     // ::::::::::::::::
     // Constructor
@@ -22,7 +23,9 @@ public class ConnectionManager
     
     // Useless (?)
     public ConnectionManager() 
-    { }
+    { 
+        counter = 0;
+    }
 
     // ::::::::::::::::
     // Methods
@@ -37,8 +40,7 @@ public class ConnectionManager
             try 
             {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-                System.out.println("getConnection() Success");
+                connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);        
             } 
             catch (ClassNotFoundException e) 
             {
@@ -61,7 +63,10 @@ public class ConnectionManager
             try 
             { 
                 connection.close();
-                System.out.println("closeConnection() Success");
+
+                // Counter
+                counter = counter + 1;
+                System.out.println("Connection Closed Successfully (Connection Counter: "+counter+")");
             } 
             catch (SQLException e)
             { System.out.println(e.getMessage()); } 
